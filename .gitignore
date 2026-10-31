@@ -1,0 +1,10 @@
+# Obsidian 内部配置（包含你的插件、主题、工作区布局）
+.obsidian/
+
+# 系统垃圾文件
+Thumbs.db
+.DS_Store
+
+# 编辑器临时文件
+*.swp
+*~
