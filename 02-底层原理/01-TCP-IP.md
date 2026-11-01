@@ -36,7 +36,7 @@
 
 [[TCP滑动窗口模型]] 
 
-![滑动窗口](02-底层原理/images/TCP滑动窗口模型.png)
+![滑动窗口](D:\Dev-Linux\Cyber-Security-Journey\02-底层原理\images\TCP滑动窗口模型.png)
 
 
 ### 12.1.3 变量窗口：流量控制和拥塞控制
