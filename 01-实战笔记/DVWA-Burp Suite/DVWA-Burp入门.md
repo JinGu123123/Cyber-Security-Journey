@@ -4,7 +4,7 @@
 
 - **核心操作**：配置浏览器代理 -> 在浏览器中进入 DVWA 中的 SQL Injection -> 在 Burp 中开启 Intercept -> 在 浏览器 SQL-Injection 输入 `1` 并 `submit` -> Burp 拦截请求 -> 在 Burp 中修改 `id = 1`为`id = 1' UNION SELECT user,password FROM users#`
 - **Repeater 体验**：讲请求发送到 Repeater，在不刷新浏览器的情况下，修改`ORDER BY 3`，发现报错（Unknown column），推断查询列数为2列
-- **技术坑点**：Burp 中，修改 Payload（有效载荷），对于` `、`#`、`'`，必须做 URL 编码（如空格为%20，#为%23，'为%27），否则服务器会报 400 Bad Request
+- **技术坑点**：Burp 中，修改 Payload（攻击载荷，即发过去的恶意代码），对于` `、`#`、`'`，必须做 URL 编码（如空格为%20，#为%23，'为%27），否则服务器会报 400 Bad Request
 
 ![SQL-Injection1](images/Burp-SQL-Injection1.png)
 

@@ -41,7 +41,8 @@ SQL 注入（SQLi）是一种网络安全漏洞，允许攻击者干扰应用程
 - UNION 工具，可以从不同的数据库表中获取数据
 - 盲 SQL 注入，控制的查询结果不会在应用的响应中返回
 
-### 检索隐藏数据
+### 检索隐藏数据(Retrieving hidden data)
+
 想象一个购物应用，展示不同类别的产品。当用户点击“礼物”（Gifts）类别时，浏览器会请求以下链接：
 `https://insecure-website.com/products?category=Gifts`
 这会导致应用进行 SQL 查询，从数据库中检索相关产品的详细信息：
@@ -63,3 +64,27 @@ SQL 注入（SQLi）是一种网络安全漏洞，允许攻击者干扰应用程
 这会得到以下 SQL 查询：
 `SELECT * FROM products WHERE category = 'Gifts' OR 1=1--‘ AND released = 1`
 修改后的查询返回所有元素
+
+### 颠覆应用逻辑(Subverting application logic)
+一个应用程序，允许用户用用户名和密码登录。如果用户提交用户名和密码，应用程序通过执行以下 SQL 查询来检查凭证：`wiener`;`bluecheese`
+SELECT * FROM users WHERE username = 'wiener' AND password = 'bluecheese'
+如果查询返回了用户的详细信息，则登录成功；否则，就是被拒绝了
+在这种情况下，攻击者可以以任何用户身份登录，无需密码。他们可以通过 SQL 注释序列来移除查询从句中的密码检查。例如，提交用户名和空密码会得到以下查询：`administrator'--`
+SELECT * FROM users WHERE username = 'administrator' AND password = ''
+该查询返回了该用户，并成功将攻击者登录为该用户
+
+### 从其他数据库表检索数据(Retrieving data from other tables)
+
+当应用程序以 SQL 查询结果响应时，攻击者可以利用 SQL 注入漏洞从数据库内的其他表中检索数据。可以使用该关键词执行额外查询，并将结果附加到原始查询上：UNION SELECT
+例如，如果应用程序执行包含用户输入的以下查询：Gifts
+SELECT name,description FROM products WHERE category = 'Gifts'
+攻击者可以提交以下输入：
+`' UNION SELECT username,password FROM users--`
+这会导致应用程序返回所有用户名和密码，以及产品的名称和描述
+
+### 盲目SQL注入漏洞(Blind SQL injection vulnerabilities)
+许多 SQL 注入实例是盲目漏洞。这意味着应用程序不会返回 SQL 查询的结果或任何数据库错误的详细信息。盲目漏洞仍可被利用以访问未授权数据，但涉及的技术通常更复杂且难以实施
+根据漏洞的性质和涉及的数据库，以下技术可用于利用盲目 SQL 注入：
+- 根据单一条件的真实性，改变查询逻辑，触发应用程序响应的可检测差异。这可能包括向某个布尔逻辑注入新条件，或有条件地触发错误，比如除以零
+- 有条件地触发查询处理的时间延迟。这使你能够根据申请回复所需的时间判断病情的真实性
+- 利用 OAST 技术触发带外网络交互。这种技巧极其强大，能在其他技巧无效的情况下发挥作用。通常，可以通过带外通道直接窃取数据。例如，可以将数据放入受控制的域名的 DNS 查询中
