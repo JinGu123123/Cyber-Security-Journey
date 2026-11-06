@@ -61,14 +61,14 @@ SQL 注入（SQLi）是一种 Web 安全漏洞，允许攻击者干扰应用程�
 - 所有详细信息( * ) 
 - 从 products 表
 - 条件是 category 为 Gifts
-- 并且 released 的为1
+- 并且 released 为1
 
 这一限制（released = 1）被用来隐藏未发布的产品。假设对于未发布的产品 released = 0
 该应用没有实现任何针对 SQL 注入攻击的防御措施。这意味着攻击者可以构造以下攻击，例如：
 `https://insecure-website.com/products?category=Gifts'--`
-这会得到以下 SQL 查询：
+这导致 SQL 查询变为：
 `SELECT * FROM products WHERE category = 'Gifts'--' AND released = 1`
-关键是，注意 SQL 中这是一个注释指示器。这意味着查询的其余部分被解读为注释，实际上是删除了它。在这个例子中，这意味着查询不再包含。因此，所有产品都会被展示，包括尚未发布的产品（-- AND released = 1）
+关键是，注意`--`在 SQL 中是一个注释指示器。这意味着查询的其余部分被解读为注释，实际上是删除了它。在这个例子中，这意味着查询不再包含 `AND released = 1`。因此，所有产品都会被展示，包括尚未发布的产品
 可以使用类似的攻击，让应用程序显示任何类别的所有产品，包括他们不知道的类别：
 `https://insecure-website.com/products?category=Gifts'+OR+1=1--`
 这会得到以下 SQL 查询：
@@ -77,12 +77,12 @@ SQL 注入（SQLi）是一种 Web 安全漏洞，允许攻击者干扰应用程�
 
 ### 颠覆应用程序逻辑(Subverting application logic)
 
-一个应用程序，允许用户用用户名和密码登录。如果用户提交用户名和密码，应用程序通过执行以下 SQL 查询来检查凭证：`wiener`;`bluecheese`
-SELECT * FROM users WHERE username = 'wiener' AND password = 'bluecheese'
+一个应用程序，允许用户用用户名和密码登录。如果用户提交用户名`wiener`和密码`bluecheese`，应用程序通过执行以下 SQL 查询来检查凭证：
+`SELECT * FROM users WHERE username = 'wiener' AND password = 'bluecheese'`
 如果查询返回了用户的详细信息，则登录成功；否则，就是被拒绝了
-在这种情况下，攻击者可以以任何用户身份登录，无需密码。他们可以通过 SQL 注释序列来移除查询从句中的密码检查。例如，提交用户名和空密码会得到以下查询：`administrator'--`
-SELECT * FROM users WHERE username = 'administrator' AND password = ''
-该查询返回了该用户，并成功将攻击者登录为该用户
+在这种情况下，攻击者可以以任何用户身份登录，无需密码。他们可以通过 SQL 注释序列来移除查询的`WHERE`子句中的密码检查。例如，提交用户名`administrator'--`和空密码会得到以下查询：
+`SELECT * FROM users WHERE username = 'administrator'--'AND password = ''`
+该查询返回了用户名为`administrator`的用户，并成功将攻击者登录为该用户
 
 ### 从其他数据库表检索数据(Retrieving data from other tables)
 
