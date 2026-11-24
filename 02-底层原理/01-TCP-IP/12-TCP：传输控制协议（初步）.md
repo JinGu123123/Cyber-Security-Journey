@@ -107,7 +107,7 @@ TCP 在 IP 数据报中封装
 
 [[TCP在IP数据报中的封装]]
 
-![TCP在IP数据报中的封装](images/TCP在IP数据报中的封装.png)
+![TCP在IP数据报中的封装](images/TCP-IP/TCP在IP数据报中的封装.png)
 
 TCP 头部紧跟着 IP 头部或 IPv6 扩展头部，经常是20字节长（不带 TCP 选项）。带选项的话，TCP 头部可达60字节。常见选项包括最大段大小、时间戳、窗口缩放和选择性 ACK
 
@@ -115,7 +115,7 @@ TCP 头部本身要比 UDP 的头部更复杂。因为它更复杂，必须保�
 
 [[TCP头部]]
 
-![TCP头部](images/TCP头部.png)
+![TCP头部](images/TCP-IP/TCP头部.png)
 
 TCP 头部。标准长度是20字节，除非出现选项。**头部长度**（Header Length）字段以32位字位为单位给出头部的大小（最小值是5）。带阴影的字段（**确认号**（Acknowledgement Number））、**窗口大小**（Window Size）以及 ECE 位和 ACK 位）用于与该报文段的发送方关联的相反方向上的数据流
 
